@@ -6,7 +6,7 @@ import { businessData } from "../../../data/data";
 
 const Business = () => {
   return (
-    <section className="py-20 bg-darkblue text-white">
+    <section id="business" className="py-20 bg-darkblue text-white scroll-mt-20">
       <div className="contain">
         <div className="flex lg:items-center items-start justify-start flex-col lg:flex-row lg:justify-between w-full gap-8 lg:gap-5">
           <div className="flex-1 flex items-start justify-start flex-col gap-5">

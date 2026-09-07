@@ -10,10 +10,12 @@ import image3 from "../../../assets/images/hero3.png";
 import image4 from "../../../assets/images/hero4.png";
 import image5 from "../../../assets/images/hero5.png";
 import image6 from "../../../assets/images/hero6.png";
+import useSettingsStore from "../../../stores/useSettingsStore";
 
 const Hero = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showOpacityAnimation, setShowOpacityAnimation] = useState(false);
+  const { t } = useSettingsStore();
   const navigate = useNavigate();
   const initialValues = {
     input: "",
@@ -61,8 +63,8 @@ const Hero = () => {
       <div className="contain flex flex-col items-start justify-center h-full relative z-10">
         <div className="flex flex-col items-start justify-start gap-5 w-full">
           <h2 className="text-2xl sm:text-4xl lg:text-5xl font-semibold leading-[120%]">
-            Find the perfect <i className="font-light">freelance</i> <br />{" "}
-            services for your business
+            {t("hero.titlePart1")} <i className="font-light">{t("hero.freelance")}</i> <br />{" "}
+            {t("hero.titlePart2")}
           </h2>
           <div
             className={`flex flex-col lg:flex-row items-center w-full gap-5 lg:w-[650px] bg-white h-[50px] rounded-md focus:border focus:border-primary relative mb-20 lg:mb-0`}
@@ -83,7 +85,7 @@ const Hero = () => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 name="input"
-                placeholder='Try "building mobile app"'
+                placeholder={t("hero.searchPlaceholder")}
                 className={`w-full h-full bg-transparent outline-none text-active ${
                   errors.input && touched.input
                     ? " placeholder:text-red-500"
@@ -96,15 +98,17 @@ const Hero = () => {
               type="submit"
               className="bg-primary h-full lg:w-[150px] outline-none absolute top-16 lg:relative lg:top-0 rounded-md lg:rounded-[0] lg:rounded-tr-md lg:rounded-br-md w-full"
             >
-              Search
+              {t("hero.searchBtn")}
             </button>
           </div>
           <div className="flex items-center gap-3 flex-wrap sm:flex-row">
-            <span>Popular :</span>
+            <span>{t("hero.popular")}</span>
             {buttons.map((item, i) => (
               <button
                 key={i}
-                className="border outline-none py-1 px-2 rounded-2xl text-sm"
+                type="button"
+                onClick={() => navigate(`/gigs?search=${encodeURIComponent(item.text)}`)}
+                className="border outline-none py-1 px-3 rounded-2xl text-sm hover:bg-white/10 hover:border-primary transition-all cursor-pointer"
               >
                 {item.text}
               </button>

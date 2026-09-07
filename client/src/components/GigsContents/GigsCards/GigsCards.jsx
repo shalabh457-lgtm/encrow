@@ -6,8 +6,10 @@ import loader from "../../../assets/icons/loader.svg";
 import { Axios } from "../../../config";
 import requests from "../../../libs/request";
 import { useQuery } from "@tanstack/react-query";
+import useSettingsStore from "../../../stores/useSettingsStore";
 
 const GigsCards = ({ item }) => {
+  const { formatPrice } = useSettingsStore();
   const { isLoading, data } = useQuery({
     queryKey: [item.userId],
     queryFn: () =>
@@ -55,9 +57,9 @@ const GigsCards = ({ item }) => {
               </div>
 
               <div className="flex flex-col items-start justify-start">
-                <h2 className="text-sm font-medium">{data?.username}</h2>
+                <h2 className="text-sm font-medium">{data?.username || item?.username || "Verified Pro"}</h2>
                 <p className="text-sm font-normal text-gray-400">
-                  {data?.isSeller === true ? "Seller" : "Buyer"}
+                  {data?.isSeller === false ? "Buyer" : "Seller"}
                 </p>
               </div>
             </>
@@ -78,7 +80,7 @@ const GigsCards = ({ item }) => {
           <span className="text-sm font-normal text-gray-500">
             started AT{" "}
             <span className="text-xl font-semibold text-darkColor">
-              ${item.price}
+              {formatPrice(item.price)}
             </span>
           </span>
         </div>

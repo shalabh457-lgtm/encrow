@@ -13,7 +13,7 @@ const Marketplace = () => {
           <div className="w-full grid grid-cols-3 md:grid-cols-5 justify-center items-center gap-7 mt-6">
             {marketsData.map((item, i) => (
               <Link
-                to="/"
+                to={`/gigs?cat=${encodeURIComponent(item.title)}`}
                 key={i}
                 className="w-full flex items-center justify-center flex-col gap-4 group"
               >

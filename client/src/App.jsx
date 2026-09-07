@@ -1,7 +1,9 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+
 import Footer from "./components/Footer/Footer";
 import Navbar from "./components/Navbar/Navbar";
+
 import Homepage from "./pages/homepage/Homepage";
 import Orders from "./pages/orders/Orders";
 import Gigs from "./pages/gigs/Gigs";
@@ -19,20 +21,50 @@ const App = () => {
   return (
     <div>
       <Navbar />
+
       <Routes>
+        {/* Home */}
         <Route path="/" element={<Homepage />} />
+
+        {/* Authentication */}
         <Route path="/signin" element={<Login />} />
         <Route path="/join" element={<Register />} />
+
+        {/* Gigs */}
         <Route path="/gigs" element={<Gigs />} />
         <Route path="/gigs/:id" element={<Gig />} />
+
+        {/* Orders */}
         <Route path="/orders" element={<Orders />} />
+
+        {/* My Gigs */}
         <Route path="/myGigs" element={<MyGigs />} />
+
+        {/* Add Gig */}
         <Route path="/add" element={<Add />} />
+
+        {/* Messages */}
         <Route path="/messages" element={<Messages />} />
         <Route path="/messages/:id" element={<Message />} />
+
+        {/* Payment */}
         <Route path="/pay/:id" element={<Pay />} />
+
+        {/* Success */}
         <Route path="/success" element={<Success />} />
+
+        {/* 404 */}
+        <Route
+          path="*"
+          element={
+            <div style={{ padding: "50px", textAlign: "center" }}>
+              <h1>404</h1>
+              <p>Page not found</p>
+            </div>
+          }
+        />
       </Routes>
+
       <Footer />
     </div>
   );

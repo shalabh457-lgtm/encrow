@@ -4,12 +4,14 @@ import { BsTrash } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { columns } from "../../data/data";
 import useAuthStore from "../../stores";
+import useSettingsStore from "../../stores/useSettingsStore";
 import loader from "../../assets/icons/loader.svg";
 import requests from "../../libs/request";
 import { Axios } from "../../config";
 
 const MyGigs = () => {
   const { authUser } = useAuthStore();
+  const { formatPrice } = useSettingsStore();
   const queryClient = useQueryClient();
   const { isLoading, error, data, refetch } = useQuery({
     queryKey: ["myGigs"],
@@ -54,7 +56,7 @@ const MyGigs = () => {
       </p>
     ),
     price: (
-      <p className="w-full flex items-center justify-start">{item.price}</p>
+      <p className="w-full flex items-center justify-start font-medium">{formatPrice(item.price)}</p>
     ),
     orders: (
       <p className="w-full flex items-center justify-start">{item.sales}</p>

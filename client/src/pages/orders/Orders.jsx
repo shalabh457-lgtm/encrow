@@ -5,11 +5,13 @@ import { useQuery } from "@tanstack/react-query";
 import { Axios } from "../../config";
 import requests from "../../libs/request";
 import useAuthStore from "../../stores";
+import useSettingsStore from "../../stores/useSettingsStore";
 import loader from "../../assets/icons/loader.svg";
 import { useNavigate } from "react-router-dom";
 
 const Orders = () => {
   const { authUser } = useAuthStore();
+  const { formatPrice } = useSettingsStore();
   const navigate = useNavigate();
 
   const { isLoading, error, data } = useQuery({
@@ -48,7 +50,7 @@ const Orders = () => {
       <p className="w-full flex items-center justify-start">{item.title}</p>
     ),
     price: (
-      <p className="w-full flex items-center justify-start">{item.price}</p>
+      <p className="w-full flex items-center justify-start font-medium">{formatPrice(item.price)}</p>
     ),
     actions: (
       <div

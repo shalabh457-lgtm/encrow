@@ -3,13 +3,16 @@ import { AiOutlineClockCircle } from "react-icons/ai";
 import { BsCheckLg } from "react-icons/bs";
 import { TfiReload } from "react-icons/tfi";
 import { Link } from "react-router-dom";
+import useSettingsStore from "../../../stores/useSettingsStore";
 
 const GigsOrder = ({ data, id }) => {
+  const { formatPrice } = useSettingsStore();
+
   return (
     <div className="w-full bg-white border p-4 flex flex-col gap-4 items-start justify-start rounded">
       <div className="flex items-center justify-between gap-2 w-full">
         <h2 className="text-gray-800 text-sm font-bold">{data?.shortTitle}</h2>
-        <p className="text-base font-normal">$ {data?.price}</p>
+        <p className="text-lg font-bold text-primary">{formatPrice(data?.price)}</p>
       </div>
       <p className="text-sm font-medium text-darkColor">{data?.shortDesc}</p>
       <div className="flex items-center justify-between gap-2 w-full">
