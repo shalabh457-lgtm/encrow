@@ -8,10 +8,11 @@ import Avatar from "../../assets/icons/avatar.jpg";
 import { toast } from "react-toastify";
 import { Axios } from "../../config";
 import requests from "../../libs/request";
-import { FiChevronRight } from "react-icons/fi";
+import { FiChevronRight, FiCreditCard } from "react-icons/fi";
 import { FaBars } from "react-icons/fa";
 import MobileSidebar from "./MobileSidebar/MobileSidebar";
 import ExploreDropdown from "./ExploreDropdown/ExploreDropdown";
+import WalletDropdown from "./WalletDropdown/WalletDropdown";
 import LanguageModal from "../Modals/LanguageModal";
 import CurrencyModal from "../Modals/CurrencyModal";
 
@@ -27,6 +28,7 @@ const Navbar = () => {
   const [showExplore, setShowExplore] = useState(false);
   const [showLanguageModal, setShowLanguageModal] = useState(false);
   const [showCurrencyModal, setShowCurrencyModal] = useState(false);
+  const [showWallet, setShowWallet] = useState(false);
   const modalRef = useRef(null);
 
   useEffect(() => {
@@ -166,6 +168,27 @@ const Navbar = () => {
               <span className="font-bold">{currentCurrency?.symbol}</span>
               <span>{currentCurrency?.code}</span>
             </span>
+
+            {/* Wallet Button */}
+            <div className="relative hidden lg:flex">
+              <button
+                onClick={() => setShowWallet((prev) => !prev)}
+                className={`flex items-center gap-2 cursor-pointer hover:text-primary transition-colors py-1 select-none font-medium ${
+                  showWallet ? "text-primary" : ""
+                }`}
+                title="Wallet"
+              >
+                <div className="relative">
+                  <FiCreditCard size={18} />
+                  <span className="absolute -top-1 -right-1 w-2 h-2 bg-emerald-400 rounded-full border border-white" />
+                </div>
+                <span>Wallet</span>
+              </button>
+              <WalletDropdown
+                isOpen={showWallet}
+                onClose={() => setShowWallet(false)}
+              />
+            </div>
 
             {!authUser?.isSeller && (
               <NavLink

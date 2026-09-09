@@ -11,7 +11,7 @@ const Business = () => {
         <div className="flex lg:items-center items-start justify-start flex-col lg:flex-row lg:justify-between w-full gap-8 lg:gap-5">
           <div className="flex-1 flex items-start justify-start flex-col gap-5">
             <h4 className="text-lg md:text-3xl font-bold">
-              <span>fiverr</span>
+              <span>Trust+</span>
               <span className="font-normal"> business.</span>
             </h4>
             <h2 className="text-xl md:text-4xl font-bold">
@@ -43,7 +43,7 @@ const Business = () => {
               to="/"
               className="w-fit bg-primary py-2 px-5 text-base font-semibold rounded mt-8 transition-all hover:bg-primary/75"
             >
-              Explore Fiverr Business
+              Explore Trust+ Business
             </Link>
           </div>
           <div className="flex-1">

@@ -123,7 +123,7 @@ const ExploreDropdown = ({ isOpen, onClose }) => {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 10, scale: 0.98 }}
         transition={{ duration: 0.18, ease: "easeOut" }}
-        className="absolute top-12 left-1/2 -translate-x-1/2 w-[92vw] max-w-[940px] bg-white text-gray-800 rounded-2xl shadow-2xl border border-gray-100 p-6 z-50 overflow-hidden"
+        className="fixed top-16 left-0 right-0 mx-auto w-[92vw] max-w-[940px] bg-white text-gray-800 rounded-2xl shadow-2xl border border-gray-100 p-6 z-50 overflow-hidden"
       >
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Left 2 Columns: Category Grid */}

@@ -78,7 +78,7 @@ const Footer = () => {
                 </span>
               </div>
               <p className="text-sm font-medium text-gray-400">
-                © Fiverr International Ltd. {year}
+                © Trust+ International Ltd. {year}
               </p>
             </div>
             <div className="flex items-center justify-end lg:gap-6 flex-col md:flex-row">

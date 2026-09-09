@@ -357,15 +357,15 @@ export const businessData = [
 export const testimonyData = [
   {
     title: "Tim and Dan Joo, Co-Founder",
-    details: `"When you want to create a business bigger than yourself, you need a lot of help. That's what Fiverr does."`,
+    details: `"When you want to create a business bigger than yourself, you need a lot of help. That's what Trust+ does."`,
   },
   {
     title: "Tim and Dan Joo, Co-Founder",
-    details: `"When you want to create a business bigger than yourself, you need a lot of help. That's what Fiverr does."`,
+    details: `"When you want to create a business bigger than yourself, you need a lot of help. That's what Trust+ does."`,
   },
   {
     title: "Tim and Dan Joo, Co-Founder",
-    details: `"When you want to create a business bigger than yourself, you need a lot of help. That's what Fiverr does."`,
+    details: `"When you want to create a business bigger than yourself, you need a lot of help. That's what Trust+ does."`,
   },
 ];
 export const footerLinks = [
@@ -467,11 +467,11 @@ export const footerLinks = [
       },
       {
         to: "/",
-        text: "Selling on Fiverr",
+        text: "Selling on Trust+",
       },
       {
         to: "/",
-        text: "Buying on Fiverr",
+        text: "Buying on Trust+",
       },
     ],
   },
@@ -527,23 +527,23 @@ export const footerLinks = [
   },
   {
     id: "more",
-    title: "More From Fiverr",
+    title: "More From Trust+",
     links: [
       {
         to: "/",
-        text: "Fiverr Business",
+        text: "Trust+ Business",
       },
       {
         to: "/",
-        text: "Fiverr Pro",
+        text: "Trust+ Pro",
       },
       {
         to: "/",
-        text: "Fiverr Logo Maker",
+        text: "Trust+ Logo Maker",
       },
       {
         to: "/",
-        text: "Fiverr Guides",
+        text: "Trust+ Guides",
       },
       {
         to: "/",
@@ -551,7 +551,7 @@ export const footerLinks = [
       },
       {
         to: "/",
-        text: "Fiverr Select",
+        text: "Trust+ Select",
       },
       {
         to: "/",
@@ -559,7 +559,7 @@ export const footerLinks = [
       },
       {
         to: "/",
-        text: "Fiverr Workspace",
+        text: "Trust+ Workspace",
       },
       {
         to: "/",
