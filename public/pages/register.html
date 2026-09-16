@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trust+ - Register</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-white">
+
+    <div class="register-navbar">
+        <a href="../index.html">
+            <span>Trust+</span><span class="dot">.</span>
+        </a>
+    </div>
+
+    <div class="register-page">
+      <div class="contain">
+        <div class="register-wrapper">
+          <form id="register-form" class="register-form">
+
+            <div class="register-col">
+              <h1>Create an Account</h1>
+
+              <div class="form-group">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" id="username" required placeholder="Johndoe" class="form-input" />
+              </div>
+
+              <div class="form-group">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" id="email" required placeholder="Email Address" class="form-input" />
+              </div>
+
+              <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" id="password" required placeholder="********" class="form-input" />
+              </div>
+
+              <div class="form-group">
+                <label for="country" class="form-label">Country</label>
+                <input type="text" id="country" required placeholder="e.g Nigeria" class="form-input" />
+              </div>
+
+              <p id="error-msg-1" class="error-text hidden"></p>
+
+              <button type="submit" id="submit-btn-1" class="btn-submit">
+                Register
+              </button>
+            </div>
+
+            <div class="register-col">
+              <h1>I want to be a seller</h1>
+
+              <div class="form-group">
+                <label class="toggle-wrapper">
+                  <span class="toggle-label">Activate the seller account</span>
+                  <input type="checkbox" id="isSeller" class="toggle-checkbox" />
+                  <div class="toggle-switch"></div>
+                </label>
+              </div>
+
+              <div class="form-group mt-16">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="text" id="phone" placeholder="phone" class="form-input" />
+              </div>
+
+              <div class="form-group">
+                <label for="desc" class="form-label">Bio</label>
+                <textarea id="desc" placeholder="A short description of yourself" class="form-textarea"></textarea>
+              </div>
+            </div>
+
+            <p id="error-msg-2" class="error-text hidden hidden-desktop"></p>
+            <button type="submit" id="submit-btn-2" class="btn-submit hidden-desktop">
+              Register
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/storage.js"></script>
+    <script>
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn1 = document.getElementById('submit-btn-1');
+            const btn2 = document.getElementById('submit-btn-2');
+            const errorMsg1 = document.getElementById('error-msg-1');
+            const errorMsg2 = document.getElementById('error-msg-2');
+
+            const payload = {
+                username: document.getElementById('username').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                country: document.getElementById('country').value,
+                phone: document.getElementById('phone').value,
+                desc: document.getElementById('desc').value,
+                isSeller: document.getElementById('isSeller').checked,
+                img: null,
+                _id: Date.now().toString()
+            };
+
+            btn1.innerText = 'Loading...';
+            btn2.innerText = 'Loading...';
+            errorMsg1.classList.add('hidden');
+            errorMsg2.classList.add('hidden');
+
+            await StorageManager.mockDelay(1000); // Simulate network request
+
+            const users = StorageManager.get('users') || [];
+            const userExists = users.find(u => u.username === payload.username || u.email === payload.email);
+
+            if (userExists) {
+                const msg = 'Username or Email already exists!';
+                errorMsg1.innerText = msg;
+                errorMsg2.innerText = msg;
+                errorMsg1.classList.remove('hidden');
+                errorMsg2.classList.remove('hidden');
+                btn1.innerText = 'Register';
+                btn2.innerText = 'Register';
+                return;
+            }
+
+            users.push(payload);
+            StorageManager.set('users', users);
+
+            // Auto login
+            StorageManager.setCurrentUser(payload);
+            window.location.href = '../index.html';
+        });
+
+        // Responsive handling for double submit buttons which were in original
+        if (window.innerWidth <= 768) {
+            document.getElementById('submit-btn-1').style.display = 'none';
+            document.getElementById('submit-btn-2').style.display = 'block';
+            document.getElementById('error-msg-2').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

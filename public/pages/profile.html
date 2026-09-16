@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Profile | Trust+</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="profile-page">
+
+    <header id="navbar" class="navbar navbar-page">
+      <div class="contain">
+        <div class="navbar-inner">
+          <a href="../index.html" class="navbar-logo">
+            <span>Trust+</span><span class="dot">.</span>
+          </a>
+          <nav class="nav-links" id="nav-links"></nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-wrapper pb-40">
+      <div class="contain">
+        <div class="profile-layout">
+
+          <div class="profile-sidebar">
+            <div class="profile-card">
+              <div class="profile-avatar-wrapper">
+                <img id="profile-avatar" src="https://i.pravatar.cc/150" alt="Avatar" />
+                <div class="profile-online-dot"></div>
+              </div>
+              <h1 id="profile-name">Seller Name</h1>
+              <p id="profile-desc" class="profile-short-desc">Short description...</p>
+
+              <button class="btn-contact">Contact Me</button>
+
+              <div class="profile-meta">
+                <div class="profile-meta-row">
+                  <span>
+                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 384 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"></path></svg> 
+                    From
+                  </span>
+                  <span id="profile-country">Country</span>
+                </div>
+                <div class="profile-meta-row">
+                  <span>
+                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 448 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M436 160H12c-6.6 0-12-5.4-12-12v-36c0-26.5 21.5-48 48-48h48V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h128V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h48c26.5 0 48 21.5 48 48v36c0 6.6-5.4 12-12 12zM12 192h424c6.6 0 12 5.4 12 12v260c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V204c0-6.6 5.4-12 12-12zm333.3 227c3-3 7.8-3 10.8 0l21.4 21.4c3 3 7.8 3 10.8 0l61.7-61.7c3-3 3-7.8 0-10.8l-21.4-21.4c-3-3-7.8-3-10.8 0l-45.6 45.6-20.2-20.2c-3-3-7.8-3-10.8 0l-21.4 21.4c-3 3-3 7.8 0 10.8l35.5 35.5z"></path></svg>
+                    Member since
+                  </span>
+                  <span id="profile-member-since">Nov 2021</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="profile-info-card">
+              <div>
+                <h3>Description</h3>
+                <p id="profile-full-desc">Full description...</p>
+              </div>
+
+              <div class="profile-info-section">
+                <h3>Languages</h3>
+                <p id="profile-languages">English, Spanish</p>
+              </div>
+
+              <div class="profile-info-section">
+                <h3>Skills</h3>
+                <div id="profile-skills" class="profile-skills">
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-main">
+            <h2>
+              <span id="gigs-owner-name">Seller</span>'s Gigs
+            </h2>
+            <div id="profile-gigs-container" class="profile-gigs-grid">
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+
+    <script src="../js/storage.js"></script>
+    <script src="../js/data.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/profile.js"></script>
+</body>
+</html>

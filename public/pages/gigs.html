@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services | Trust+</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <header id="navbar" class="navbar navbar-page">
+      <div class="contain">
+        <div class="navbar-inner">
+          <a href="../index.html" class="navbar-logo">
+            <span>Trust+</span><span class="dot">.</span>
+          </a>
+          <nav class="nav-links" id="nav-links"></nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-wrapper">
+      <div class="contain">
+        <div class="breadcrumb">
+          <span>🏠</span>
+          <span>/</span>
+          <span>Services</span>
+          <span>/</span>
+          <span id="breadcrumb-title" class="active-crumb">All Gigs &amp; Services</span>
+        </div>
+
+        <div class="gigs-header mt-16">
+          <h2 id="page-heading">All Gigs &amp; Services</h2>
+          <p id="page-subtitle">Find high-quality freelance services and talent for your business</p>
+        </div>
+
+        <div class="gigs-filters">
+          <div class="gigs-filter-group">
+            <label>Budget:</label>
+            <input type="text" placeholder="min (₹)" class="filter-input" />
+            <input type="text" placeholder="max (₹)" class="filter-input" />
+            <button class="btn-primary">Apply</button>
+          </div>
+        </div>
+
+        <div id="gigs-grid" class="gigs-grid">
+
+        </div>
+      </div>
+    </main>
+
+    <script src="../js/storage.js"></script>
+    <script src="../js/data.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/gigs.js"></script>
+</body>
+</html>
