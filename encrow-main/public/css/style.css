@@ -181,25 +181,6 @@ ul, ol { list-style: none; }
   gap: 8px;
 }
 
-.nav-wallet {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(29, 191, 115, 0.15);
-  border: 1px solid var(--primary);
-  color: var(--primary);
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-.nav-wallet:hover {
-  background: var(--primary);
-  color: #fff;
-}
-
 .nav-user { position: relative; display: flex; align-items: center; gap: 12px; cursor: pointer; }
 .nav-user-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
 .nav-dropdown {
@@ -223,7 +204,7 @@ ul, ol { list-style: none; }
   padding: 12px;
   font-weight: 500;
   box-shadow: var(--shadow-box);
-  max-height: 300px;
+  max-height: 250px;
   overflow-y: auto;
 }
 .nav-dropdown-inner a {
@@ -865,69 +846,4 @@ ul, ol { list-style: none; }
   .gigs-grid { grid-template-columns: 1fr; }
   .profile-gigs-grid { grid-template-columns: 1fr; }
   .contain { padding: 0 16px; }
-}
-
-/* Compare Packages Modal Styles */
-.compare-table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
-  margin-top: 20px;
-}
-.compare-table th {
-  padding: 16px;
-  background: #f7f7f7;
-  border: 1px solid #e4e5e7;
-  text-align: center;
-}
-.compare-table th:first-child {
-  background: transparent;
-  border-top: transparent;
-  border-left: transparent;
-}
-.compare-table th .pkg-price {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #1a1b1d;
-  margin-bottom: 4px;
-}
-.compare-table th .pkg-name {
-  font-size: 0.875rem;
-  color: #74767e;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-.compare-table td {
-  padding: 16px;
-  border: 1px solid #e4e5e7;
-  color: #62646a;
-  font-size: 0.95rem;
-  vertical-align: top;
-}
-.compare-table td:first-child {
-  font-weight: 600;
-  color: #404145;
-  background: #fdfdfd;
-}
-.btn-select-pkg {
-  width: 100%;
-  padding: 12px;
-  background: transparent;
-  border: 1px solid #222325;
-  color: #222325;
-  border-radius: 4px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.btn-select-pkg:hover {
-  background: #222325;
-  color: #fff;
-}
-.btn-select-premium {
-  background: #222325;
-  color: #fff;
-}
-.btn-select-premium:hover {
-  opacity: 0.9;
 }
