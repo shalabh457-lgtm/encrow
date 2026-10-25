@@ -36,7 +36,40 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    renderGigs(gigs);
+    // Store the filtered gigs as the "base" list for the budget filter to work on
+    const baseGigs = [...gigs];
+
+    renderGigs(baseGigs);
+
+    // --- Budget Filter Logic ---
+    const applyBtn = document.getElementById('filter-apply-btn');
+    const clearBtn = document.getElementById('filter-clear-btn');
+    const minInput = document.getElementById('filter-min');
+    const maxInput = document.getElementById('filter-max');
+
+    if (applyBtn) {
+        applyBtn.addEventListener('click', () => {
+            const min = minInput.value !== '' ? Number(minInput.value) : 0;
+            const max = maxInput.value !== '' ? Number(maxInput.value) : Infinity;
+
+            if (min > max) {
+                alert('Min budget cannot be greater than max budget!');
+                return;
+            }
+
+            // Filter from the base list (not the already rendered list)
+            const filtered = baseGigs.filter(g => g.price >= min && g.price <= max);
+            renderGigs(filtered);
+        });
+    }
+
+    if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+            minInput.value = '';
+            maxInput.value = '';
+            renderGigs(baseGigs); // Reset to original list
+        });
+    }
 });
 
 function renderGigs(gigs) {
@@ -62,7 +95,6 @@ function renderGigs(gigs) {
                 <img src="${gig.img}" alt="${gig.title}" class="gig-card-cover" />
                 <div class="gig-card-body">
                     <div class="gig-card-user" onclick="event.stopPropagation(); window.location.href='profile.html?user=${gig.username}'">
-                        <img src="${gig.userImg}" alt="${gig.username}" class="gig-card-avatar" />
                         <div>
                             <div class="gig-card-username">${gig.username}</div>
                             <div class="gig-card-seller-tag">${gig.rate}</div>

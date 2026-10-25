@@ -27,7 +27,6 @@ function loadGigData() {
     document.getElementById('gig-title').innerText = gig.title;
 
     document.getElementById('seller-name-top').innerText = gig.username;
-    document.getElementById('seller-avatar-top').src = gig.userImg;
     document.getElementById('seller-link-top').href = `profile.html?user=${gig.username}`;
     document.getElementById('gig-rating').innerText = `${rating} (${gig.starNumber})`;
 
@@ -35,7 +34,6 @@ function loadGigData() {
     document.getElementById('gig-desc').innerText = gig.fullDesc || gig.description;
 
     document.getElementById('seller-name-bottom').innerText = gig.username;
-    document.getElementById('seller-avatar-bottom').src = gig.userImg;
     document.getElementById('seller-link-bottom').href = `profile.html?user=${gig.username}`;
     document.getElementById('seller-name-link-bottom').href = `profile.html?user=${gig.username}`;
 
@@ -134,18 +132,39 @@ function createCompareModal(gig) {
         modal.children[0].style.transform = 'translateY(30px)';
     });
 
+    // Map package key to package data for easy lookup
+    const pkgMap = { basic: p1, standard: p2, premium: p3 };
+
     document.querySelectorAll('.btn-select-pkg').forEach(btn => {
         btn.addEventListener('click', (e) => {
-            const originalText = e.target.innerText;
-            e.target.innerText = 'Selected!';
+            const selectedPkg = pkgMap[e.target.getAttribute('data-pkg')];
+            if (!selectedPkg) return;
+
+            // Show "Selected!" feedback briefly
+            e.target.innerText = 'Selected ✓';
+
             setTimeout(() => {
+                // Close the modal
                 modal.style.opacity = '0';
                 modal.style.pointerEvents = 'none';
                 modal.children[0].style.transform = 'translateY(30px)';
-                setTimeout(() => {
-                    e.target.innerText = originalText;
-                }, 300);
-            }, 800);
+
+                // --- Update the order card on the main gig page ---
+                const pkgNameEl = document.getElementById('order-pkg-name');
+                const priceEl = document.getElementById('gig-price');
+                const shortDescEl = document.getElementById('gig-short-desc');
+                const deliveryEl = document.getElementById('gig-delivery');
+                const revisionsEl = document.getElementById('gig-revisions');
+
+                if (pkgNameEl) pkgNameEl.innerText = selectedPkg.name + ' Package';
+                if (priceEl) priceEl.innerText = '₹' + selectedPkg.price.toLocaleString('en-IN');
+                if (shortDescEl) shortDescEl.innerText = selectedPkg.desc;
+                if (deliveryEl) deliveryEl.innerText = selectedPkg.delivery + ' Delivery';
+                if (revisionsEl) revisionsEl.innerText = selectedPkg.revisions + ' Revisions';
+
+                // Reset button text
+                setTimeout(() => { e.target.innerText = 'Select'; }, 300);
+            }, 600);
         });
     });
 }

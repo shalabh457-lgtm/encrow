@@ -34,7 +34,6 @@ function loadProfileData() {
     document.getElementById('profile-member-since').innerText = userProfile.memberSince;
     document.getElementById('profile-languages').innerText = userProfile.languages;
     document.getElementById('gigs-owner-name').innerText = userProfile.username;
-    document.getElementById('profile-avatar').src = userProfile.img; // Update the image source
 
     // 5. Display the user's skills as little tags
     const skillsContainer = document.getElementById('profile-skills');
@@ -87,9 +86,6 @@ function renderGigs(gigs) {
                 <div class="w-full pt-5 flex items-start flex-col gap-3 justify-between flex-grow">
                     <div class="flex flex-col gap-3 w-full">
                         <div class="flex items-center justify-start gap-3 px-4">
-                            <div class="w-8 h-8">
-                                <img src="${gig.userImg}" alt="${gig.username}" class="w-full h-full object-cover rounded-full" />
-                            </div>
                             <div class="flex flex-col items-start justify-start">
                                 <h2 class="text-sm font-medium text-darkColor">${gig.username}</h2>
                                 <p class="text-sm font-normal text-gray-400">Seller</p>

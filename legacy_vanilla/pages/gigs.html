@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Services | Trust+</title>
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -37,9 +40,10 @@
         <div class="gigs-filters">
           <div class="gigs-filter-group">
             <label>Budget:</label>
-            <input type="text" placeholder="min (₹)" class="filter-input" />
-            <input type="text" placeholder="max (₹)" class="filter-input" />
-            <button class="btn-primary">Apply</button>
+            <input type="number" id="filter-min" placeholder="min (₹)" class="filter-input" />
+            <input type="number" id="filter-max" placeholder="max (₹)" class="filter-input" />
+            <button id="filter-apply-btn" class="btn-primary">Apply</button>
+            <button id="filter-clear-btn" class="btn-outline">Clear</button>
           </div>
         </div>
 

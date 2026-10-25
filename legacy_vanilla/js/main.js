@@ -2,7 +2,51 @@ document.addEventListener('DOMContentLoaded', () => {
     renderNavbar();
     setupScrollListener();
     setupHeroSlideshow();
+    setupHeroSearch();
+    renderHomeGigs();
 });
+
+function renderHomeGigs() {
+    const container = document.getElementById('home-gigs-grid');
+    if (!container || !window.MockData) return;
+
+    // Show first 8 gigs as featured
+    const featured = window.MockData.gigs.slice(0, 8);
+
+    featured.forEach(gig => {
+        const rating = !isNaN(gig.totalStars / gig.starNumber)
+            ? Math.round(gig.totalStars / gig.starNumber) : 0;
+
+        const card = `
+            <div class="gig-card" onclick="window.location.href='pages/gigs.html?search=${encodeURIComponent(gig.title)}'">
+                <img src="${gig.img}" alt="${gig.title}" class="gig-card-cover" />
+                <div class="gig-card-body">
+                    <div class="gig-card-user">
+                        <div>
+                            <div class="gig-card-username">${gig.username}</div>
+                            <div class="gig-card-seller-tag">${gig.rate}</div>
+                        </div>
+                    </div>
+                    <div class="gig-card-title">${gig.title}</div>
+                    <div class="gig-card-rating">
+                        <svg fill="currentColor" viewBox="0 0 16 16" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+                        ${rating} <span class="rating-count">(${gig.starNumber})</span>
+                    </div>
+                </div>
+                <div class="gig-card-footer">
+                    <span class="gig-card-heart" onclick="event.stopPropagation();">
+                        <svg fill="currentColor" viewBox="0 0 16 16" height="20" width="20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg>
+                    </span>
+                    <span class="gig-card-price">
+                        Starting At <strong>${window.MockData.formatPrice(gig.price)}</strong>
+                    </span>
+                </div>
+            </div>
+        `;
+        container.innerHTML += card;
+    });
+}
+
 
 function setupScrollListener() {
     const navbar = document.getElementById('navbar');
@@ -40,13 +84,11 @@ function renderNavbar() {
 
     if (currentUser) {
         navLinksContainer.innerHTML = `
-            <a href="pages/gigs.html">Explore</a>
             <span class="nav-wallet" title="Wallet Balance">
                 <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="16" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M464 128H48c-26.51 0-48 21.49-48 48v224c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V176c0-26.51-21.49-48-48-48zM392 336c-22.091 0-40-17.909-40-40s17.909-40 40-40s40 17.909 40 40s-17.909 40-40 40zm72-160H48v-32c0-8.837 7.163-16 16-16h384c8.837 0 16 7.163 16 16v32z"></path></svg>
                 ₹${currentUser.walletBalance || 0}
             </span>
             <div class="nav-user">
-                <img src="${currentUser.img || 'https://i.pravatar.cc/150?u=' + currentUser.username}" alt="Profile" class="nav-user-avatar">
                 <span>${currentUser.username}</span>
                 <div class="nav-dropdown">
                     <div class="nav-dropdown-inner">
@@ -55,7 +97,6 @@ function renderNavbar() {
                             <a href="pages/add.html">Add New Gig</a>
                         ` : ''}
                         <a href="pages/orders.html">Orders</a>
-                        <a href="pages/messages.html">Messages</a>
                         <a href="#" id="topup-btn">Top Up Wallet</a>
                         <a href="#" id="logout-btn">Logout</a>
                     </div>
@@ -80,7 +121,6 @@ function renderNavbar() {
         });
     } else {
         navLinksContainer.innerHTML = `
-            <a href="pages/gigs.html">Explore</a>
             <a href="pages/login.html">Sign in</a>
             <a href="pages/register.html" class="nav-join-btn">Join</a>
         `;
@@ -116,33 +156,65 @@ function setupHeroSlideshow() {
     }, 5000);
 }
 
+function setupHeroSearch() {
+    const searchInput = document.getElementById('hero-search-input');
+    const searchBtn = document.getElementById('hero-search-btn');
+    const tagBtns = document.querySelectorAll('.hero-tag-btn');
+
+    // Helper: navigate to gigs page with the search term
+    function doSearch(query) {
+        const q = query.trim();
+        if (!q) return;
+        window.location.href = `pages/gigs.html?search=${encodeURIComponent(q)}`;
+    }
+
+    // Search button click
+    if (searchBtn) {
+        searchBtn.addEventListener('click', () => doSearch(searchInput.value));
+    }
+
+    // Press Enter in the search box
+    if (searchInput) {
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') doSearch(searchInput.value);
+        });
+    }
+
+    // Popular tag buttons — each has a data-search attribute
+    tagBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            doSearch(btn.getAttribute('data-search'));
+        });
+    });
+}
+
 function createWalletModal() {
     if (document.getElementById('wallet-modal')) return;
     
     const modalHtml = `
-        <div id="wallet-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.25s;">
-            <div style="background: #fff; width: 380px; border-radius: 16px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transform: translateY(20px); transition: transform 0.25s;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                    <h3 style="font-size: 1.15rem; font-weight: 700; color: #1a1b1d; display: flex; align-items: center; gap: 8px;">
-                        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="18" width="18" style="color: var(--primary)"><path d="M464 128H48c-26.51 0-48 21.49-48 48v224c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V176c0-26.51-21.49-48-48-48zM392 336c-22.091 0-40-17.909-40-40s17.909-40 40-40s40 17.909 40 40s-17.909 40-40 40zm72-160H48v-32c0-8.837 7.163-16 16-16h384c8.837 0 16 7.163 16 16v32z"></path></svg>
+        <div id="wallet-modal" class="wallet-modal-overlay">
+            <div class="wallet-modal-box">
+                <div class="wallet-modal-header">
+                    <h3 class="wallet-modal-title">
+                        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="18" width="18"><path d="M464 128H48c-26.51 0-48 21.49-48 48v224c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V176c0-26.51-21.49-48-48-48zM392 336c-22.091 0-40-17.909-40-40s17.909-40 40-40s40 17.909 40 40s-17.909 40-40 40zm72-160H48v-32c0-8.837 7.163-16 16-16h384c8.837 0 16 7.163 16 16v32z"></path></svg>
                         Top Up Wallet
                     </h3>
-                    <button id="close-wallet-modal" style="background: #f5f5f5; border: none; font-size: 1.25rem; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; color: #74767e; display: flex; align-items: center; justify-content: center;">&times;</button>
+                    <button id="close-wallet-modal" class="wallet-close-btn">&times;</button>
                 </div>
-                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                    <button class="wallet-preset-btn" data-amt="500" style="flex: 1; padding: 10px; border: 1px solid #e4e5e7; border-radius: 8px; background: #fff; cursor: pointer; font-weight: 600; color: #404145; transition: all 0.2s;">₹500</button>
-                    <button class="wallet-preset-btn" data-amt="1000" style="flex: 1; padding: 10px; border: 1px solid #e4e5e7; border-radius: 8px; background: #fff; cursor: pointer; font-weight: 600; color: #404145; transition: all 0.2s;">₹1000</button>
-                    <button class="wallet-preset-btn" data-amt="2000" style="flex: 1; padding: 10px; border: 1px solid #e4e5e7; border-radius: 8px; background: #fff; cursor: pointer; font-weight: 600; color: #404145; transition: all 0.2s;">₹2000</button>
-                    <button class="wallet-preset-btn" data-amt="5000" style="flex: 1; padding: 10px; border: 1px solid #e4e5e7; border-radius: 8px; background: #fff; cursor: pointer; font-weight: 600; color: #404145; transition: all 0.2s;">₹5000</button>
+                <div class="wallet-preset-group">
+                    <button class="wallet-preset-btn" data-amt="500">₹500</button>
+                    <button class="wallet-preset-btn" data-amt="1000">₹1000</button>
+                    <button class="wallet-preset-btn" data-amt="2000">₹2000</button>
+                    <button class="wallet-preset-btn" data-amt="5000">₹5000</button>
                 </div>
-                <div style="margin-bottom: 24px;">
-                    <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #74767e; margin-bottom: 8px;">Or enter custom amount</label>
-                    <div style="position: relative;">
-                        <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #74767e; font-weight: 600;">₹</span>
-                        <input type="number" id="wallet-custom-amt" placeholder="1500" style="width: 100%; padding: 12px 12px 12px 30px; border: 1px solid #c5c6c9; border-radius: 8px; outline: none; font-size: 1rem; font-weight: 600; color: #404145; box-sizing: border-box;">
+                <div class="wallet-input-group">
+                    <label class="wallet-input-label">Or enter custom amount</label>
+                    <div class="wallet-input-wrapper">
+                        <span class="wallet-input-prefix">₹</span>
+                        <input type="number" id="wallet-custom-amt" placeholder="1500" class="wallet-input">
                     </div>
                 </div>
-                <button id="confirm-topup-btn" style="width: 100%; background: var(--primary); color: #fff; padding: 14px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: opacity 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px;">
+                <button id="confirm-topup-btn" class="wallet-submit-btn">
                     Proceed to Pay
                 </button>
             </div>
@@ -165,13 +237,9 @@ function createWalletModal() {
         btn.addEventListener('click', (e) => {
             input.value = e.target.getAttribute('data-amt');
             presetBtns.forEach(b => {
-                b.style.borderColor = '#e4e5e7';
-                b.style.color = '#404145';
-                b.style.background = '#fff';
+                b.classList.remove('active');
             });
-            e.target.style.borderColor = 'var(--primary)';
-            e.target.style.color = 'var(--primary)';
-            e.target.style.background = 'rgba(29, 191, 115, 0.05)';
+            e.target.classList.add('active');
         });
     });
 
