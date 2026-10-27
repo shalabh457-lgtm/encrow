@@ -32,10 +32,9 @@ export default function HomePage({ navigate }) {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    if (heroSearch.trim()) {
-      setSearchQuery(heroSearch.trim());
-      navigate('gigs', { search: heroSearch.trim() });
-    }
+    const query = heroSearch.trim();
+    setSearchQuery(query);
+    navigate('gigs', query ? { search: query } : {});
   };
 
   const handleTagClick = (tag) => {

@@ -1,15 +1,15 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useApp } from '../context/AppContext';
 import { CATEGORIES } from '../data/mockData';
 import GigCard from '../components/GigCard';
-import { Search, Filter, RotateCcw, Frown, ChevronRight } from 'lucide-react';
+import { Search, Filter, RotateCcw, Frown, ChevronRight, X } from 'lucide-react';
 
 export default function GigsPage({ routeParams, navigate }) {
   const { gigs, favorites, activeCategory, setActiveCategory, searchQuery, setSearchQuery } = useApp();
 
   // Route params take precedence if passed
-  const initialCat = routeParams?.cat || activeCategory || '';
-  const initialSearch = routeParams?.search || searchQuery || '';
+  const initialCat = routeParams?.cat ?? activeCategory ?? '';
+  const initialSearch = routeParams?.search ?? searchQuery ?? '';
   const isFavOnly = !!routeParams?.favOnly;
 
   const [category, setCategory] = useState(initialCat);
@@ -18,6 +18,19 @@ export default function GigsPage({ routeParams, navigate }) {
   const [maxPrice, setMaxPrice] = useState('');
   const [appliedBudget, setAppliedBudget] = useState({ min: 0, max: Infinity });
   const [sortBy, setSortBy] = useState('featured');
+
+  // Synchronize when routeParams or global context updates
+  useEffect(() => {
+    if (routeParams?.search !== undefined) {
+      setSearchTerm(routeParams.search);
+    }
+  }, [routeParams?.search]);
+
+  useEffect(() => {
+    if (routeParams?.cat !== undefined) {
+      setCategory(routeParams.cat);
+    }
+  }, [routeParams?.cat]);
 
   // Filter logic
   const filteredGigs = useMemo(() => {
@@ -135,8 +148,36 @@ export default function GigsPage({ routeParams, navigate }) {
 
         {/* Toolbar & Filters */}
         <div className="catalog-toolbar">
-          {/* Left: Category pills */}
+          {/* Left: Category pills & Search */}
           <div className="filter-group">
+            {/* Inline Search Box */}
+            <div className="catalog-search-box" style={{ display: 'flex', alignItems: 'center', background: 'var(--bg-card)', border: '1px solid var(--border-light)', borderRadius: 'var(--radius-full)', padding: '0 12px', height: '38px', gap: '8px' }}>
+              <Search size={14} color="var(--text-muted)" />
+              <input
+                type="text"
+                placeholder="Search in gigs & skills..."
+                value={searchTerm}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setSearchQuery(e.target.value);
+                }}
+                style={{ border: 'none', background: 'transparent', outline: 'none', fontSize: '0.85rem', width: '180px', color: 'var(--text-main)' }}
+              />
+              {searchTerm && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchTerm('');
+                    setSearchQuery('');
+                  }}
+                  style={{ background: 'none', border: 'none', color: 'var(--text-light)', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center' }}
+                  title="Clear search"
+                >
+                  <X size={14} />
+                </button>
+              )}
+            </div>
+
             <select
               className="sort-select"
               value={category}

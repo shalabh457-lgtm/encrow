@@ -1,4 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import {
+  Routes,
+  Route,
+  useNavigate,
+  useLocation,
+  useSearchParams,
+  useParams
+} from 'react-router-dom';
 import { AppProvider, useApp } from './context/AppContext';
 import Navbar from './components/Navbar';
 import CategoryBar from './components/CategoryBar';
@@ -15,91 +23,103 @@ import OrdersPage from './pages/OrdersPage';
 import MyGigsPage from './pages/MyGigsPage';
 import AddGigPage from './pages/AddGigPage';
 
+// Adapter wrappers to read params/query for components
+function GigsWrapper({ navigate }) {
+  const [searchParams] = useSearchParams();
+  const routeParams = {
+    cat: searchParams.get('cat') || '',
+    search: searchParams.get('search') || '',
+    favOnly: searchParams.get('favOnly') === 'true'
+  };
+  return <GigsPage routeParams={routeParams} navigate={navigate} />;
+}
+
+function GigDetailWrapper({ navigate }) {
+  const [searchParams] = useSearchParams();
+  const { id } = useParams();
+  const routeParams = {
+    id: id || searchParams.get('id')
+  };
+  return <GigDetailPage routeParams={routeParams} navigate={navigate} />;
+}
+
+function ProfileWrapper({ navigate }) {
+  const [searchParams] = useSearchParams();
+  const { user } = useParams();
+  const routeParams = {
+    user: user || searchParams.get('user')
+  };
+  return <ProfilePage routeParams={routeParams} navigate={navigate} />;
+}
+
 function MainApp() {
-  const [route, setRoute] = useState('home');
-  const [routeParams, setRouteParams] = useState({});
-  const { activeCategory, setActiveCategory } = useApp();
+  const rrdNavigate = useNavigate();
+  const location = useLocation();
+  const { activeCategory } = useApp();
 
-  // Navigation helper
-  const navigate = (newRoute, params = {}) => {
-    setRoute(newRoute);
-    setRouteParams(params);
+  // Scroll to top on route change
+  React.useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [location.pathname, location.search]);
 
-    // Update URL hash for clean history and direct linkability
-    let hash = `#/${newRoute}`;
-    if (params.id) hash += `?id=${params.id}`;
-    if (params.user) hash += `?user=${params.user}`;
-    if (params.cat) hash += `?cat=${encodeURIComponent(params.cat)}`;
-    if (params.search) hash += `?search=${encodeURIComponent(params.search)}`;
-    window.history.pushState(null, '', hash);
+  // Unified navigate helper ensuring backwards compatibility with existing signature:
+  // navigate(route, params) or direct path
+  const navigate = (to, params = {}) => {
+    if (typeof to !== 'string') return;
+
+    // Handle relative or slash routes
+    let path = to.startsWith('/') ? to : `/${to === 'home' ? '' : to}`;
+
+    const query = new URLSearchParams();
+    if (params.id) query.set('id', params.id);
+    if (params.user) query.set('user', params.user);
+    if (params.cat) query.set('cat', params.cat);
+    if (params.search) query.set('search', params.search);
+    if (params.favOnly) query.set('favOnly', 'true');
+
+    const queryString = query.toString();
+    const targetUrl = queryString ? `${path}?${queryString}` : path;
+    rrdNavigate(targetUrl);
   };
 
-  // Sync with browser back/forward and initial URL hash
-  useEffect(() => {
-    const handlePopState = () => {
-      const hash = window.location.hash.slice(2); // remove #/
-      if (!hash) {
-        setRoute('home');
-        setRouteParams({});
-        return;
-      }
+  // Determine current active route identifier for Navbar styling
+  const currentRoute =
+    location.pathname === '/'
+      ? 'home'
+      : location.pathname.replace(/^\//, '');
 
-      const [path, queryStr] = hash.split('?');
-      const params = {};
-      if (queryStr) {
-        const searchParams = new URLSearchParams(queryStr);
-        for (const [k, v] of searchParams.entries()) {
-          params[k] = v;
-        }
-      }
-
-      setRoute(path || 'home');
-      setRouteParams(params);
-    };
-
-    window.addEventListener('popstate', handlePopState);
-    handlePopState(); // initial on mount
-
-    return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
-
-  const renderCurrentPage = () => {
-    switch (route) {
-      case 'home':
-        return <HomePage navigate={navigate} />;
-      case 'gigs':
-        return <GigsPage routeParams={routeParams} navigate={navigate} />;
-      case 'gig-detail':
-        return <GigDetailPage routeParams={routeParams} navigate={navigate} />;
-      case 'profile':
-        return <ProfilePage routeParams={routeParams} navigate={navigate} />;
-      case 'orders':
-        return <OrdersPage navigate={navigate} />;
-      case 'my-gigs':
-        return <MyGigsPage navigate={navigate} />;
-      case 'add-gig':
-        return <AddGigPage navigate={navigate} />;
-      default:
-        return <HomePage navigate={navigate} />;
-    }
-  };
+  const isHero = location.pathname === '/';
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      {/* Navbar with hero transparency only on home top */}
-      <Navbar currentRoute={route} navigate={navigate} isHero={route === 'home'} />
+      {/* Navbar with hero transparency on home page */}
+      <Navbar currentRoute={currentRoute} navigate={navigate} isHero={isHero} />
 
-      {/* Category Bar shown on non-home pages or home sub-sections */}
-      {route !== 'home' && (
+      {/* Category Bar shown on non-home pages */}
+      {!isHero && (
         <CategoryBar
-          activeCategory={routeParams?.cat || activeCategory}
+          activeCategory={activeCategory}
           onSelectCategory={(cat) => navigate('gigs', { cat })}
         />
       )}
 
-      {/* Main Page Body */}
-      <main style={{ flex: 1 }}>{renderCurrentPage()}</main>
+      {/* Main Page Routes */}
+      <main style={{ flex: 1 }}>
+        <Routes>
+          <Route path="/" element={<HomePage navigate={navigate} />} />
+          <Route path="/home" element={<HomePage navigate={navigate} />} />
+          <Route path="/gigs" element={<GigsWrapper navigate={navigate} />} />
+          <Route path="/gig-detail" element={<GigDetailWrapper navigate={navigate} />} />
+          <Route path="/gig-detail/:id" element={<GigDetailWrapper navigate={navigate} />} />
+          <Route path="/profile" element={<ProfileWrapper navigate={navigate} />} />
+          <Route path="/profile/:user" element={<ProfileWrapper navigate={navigate} />} />
+          <Route path="/orders" element={<OrdersPage navigate={navigate} />} />
+          <Route path="/my-gigs" element={<MyGigsPage navigate={navigate} />} />
+          <Route path="/add-gig" element={<AddGigPage navigate={navigate} />} />
+          {/* Fallback route */}
+          <Route path="*" element={<HomePage navigate={navigate} />} />
+        </Routes>
+      </main>
 
       {/* Footer */}
       <Footer navigate={navigate} />

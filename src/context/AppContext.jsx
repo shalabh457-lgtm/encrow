@@ -58,6 +58,10 @@ export function AppProvider({ children }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [toasts, setToasts] = useState([]);
 
+  // OTP / Registration state
+  const [pendingRegistration, setPendingRegistration] = useState(null); // userData awaiting OTP
+  const [generatedOtp, setGeneratedOtp] = useState(''); // mock OTP
+
   // Sync to local storage
   useEffect(() => {
     setStorage('currentUser', currentUser);
@@ -118,17 +122,31 @@ export function AppProvider({ children }) {
     addToast(`Signed in as ${targetUser.username} (${type})`);
   };
 
-  const register = (userData) => {
+  // Step 1: Validate registration data and emit a mock OTP
+  const initiateRegistration = (userData) => {
     const exists = users.find(
       (u) =>
         u.username?.toLowerCase() === userData.username.toLowerCase() ||
         u.email?.toLowerCase() === userData.email.toLowerCase()
     );
-
     if (exists) {
       return { success: false, message: 'Username or email already in use.' };
     }
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    setGeneratedOtp(otp);
+    setPendingRegistration(userData);
+    // In a real app this would hit an email/SMS API.
+    // For the mock, print it to the console so testers can copy-paste it.
+    console.log(`%c[Mock OTP] Your verification code: ${otp}`, 'color:#10b981;font-size:16px;font-weight:bold;');
+    return { success: true, otp }; // also returned so UI can show it in dev banner
+  };
 
+  // Step 2: Confirm OTP and finalise registration
+  const confirmOtpAndRegister = (enteredOtp) => {
+    if (enteredOtp !== generatedOtp) {
+      return { success: false, message: 'Incorrect OTP. Please try again.' };
+    }
+    const userData = pendingRegistration;
     const newUser = {
       _id: Date.now().toString(),
       username: userData.username,
@@ -138,19 +156,22 @@ export function AppProvider({ children }) {
       phone: userData.phone || '',
       desc: userData.desc || 'Passionate professional on Trust+.',
       isSeller: !!userData.isSeller,
-      walletBalance: 10000, // Starter credits bonus
+      walletBalance: 0,
       memberSince: new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
       skills: userData.isSeller ? ['Communication', 'Consulting'] : [],
       rating: 5.0
     };
-
     const updatedUsers = [...users, newUser];
     setUsers(updatedUsers);
     setCurrentUser(newUser);
-    setAuthModalOpen(false);
-    addToast(`Account created! You received ₹10,000 starter wallet credit 🎉`);
-    return { success: true };
+    setPendingRegistration(null);
+    setGeneratedOtp('');
+    addToast(`Account created successfully! Welcome to Trust+ 🎉`);
+    return { success: true, user: newUser };
   };
+
+  // Legacy alias kept for backward compat
+  const register = initiateRegistration;
 
   const logout = () => {
     setCurrentUser(null);
@@ -311,6 +332,10 @@ export function AppProvider({ children }) {
         login,
         quickDemoLogin,
         register,
+        initiateRegistration,
+        confirmOtpAndRegister,
+        pendingRegistration,
+        generatedOtp,
         logout,
         topUpWallet,
         createOrder,

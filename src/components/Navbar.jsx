@@ -35,7 +35,12 @@ export default function Navbar({ currentRoute, navigate, isHero = false }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  const [localSearch, setLocalSearch] = useState('');
+  const [localSearch, setLocalSearch] = useState(searchQuery || '');
+
+  // Keep local search input synchronized with global search query
+  useEffect(() => {
+    setLocalSearch(searchQuery || '');
+  }, [searchQuery]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,10 +62,9 @@ export default function Navbar({ currentRoute, navigate, isHero = false }) {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    if (localSearch.trim()) {
-      setSearchQuery(localSearch.trim());
-      navigate('gigs', { search: localSearch.trim() });
-    }
+    const query = localSearch.trim();
+    setSearchQuery(query);
+    navigate('gigs', query ? { search: query } : {});
   };
 
   const isTransparent = isHero && !scrolled;
